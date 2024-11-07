@@ -1,6 +1,10 @@
 package com.example.coach.modele;
 
-public class Profil {
+import android.content.Context;
+
+import java.io.Serializable;
+
+public class Profil implements Serializable {
 
     //constantes
     private static final Integer minFemme= 15; //maigre si en desosus

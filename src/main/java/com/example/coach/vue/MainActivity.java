@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText txtTaille;
     private EditText txtAge;
     private RadioButton rdHomme;
+    private RadioButton rdFemme;
     private TextView lblIMG;
     private ImageView imageSmiley;
     private Button btnCalc;
@@ -36,20 +37,25 @@ public class MainActivity extends AppCompatActivity {
     /**
      * démarrage appli avec récupération des objets graphiques
      * création du controleur
-     *
+     * demande d'écoute
      */
     private void init(){
         txtPoids = (EditText) findViewById(R.id.txtPoids);
         txtTaille = (EditText) findViewById((R.id.txtTaille));
         txtAge = (EditText) findViewById(R.id.txtAge);
         rdHomme = (RadioButton) findViewById(R.id.rdHomme);
+        rdFemme = (RadioButton) findViewById(R.id.rdFemme);
         lblIMG = (TextView) findViewById(R.id.lblIMG);
         imageSmiley = (ImageView) findViewById(R.id.imageSmiley);
         btnCalc = (Button) findViewById(R.id.btnCalc);
-        controle = Controle.getInstance();
+        controle = Controle.getInstance(this);
         ecouteCalcul();
+        recupProfil();
     }
 
+    /**
+     * ecoute le clic sur bntCalc
+     */
     public void ecouteCalcul(){
         btnCalc.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
@@ -75,8 +81,15 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * affiche img et message correspondant
+     * @param poids
+     * @param taille
+     * @param age
+     * @param sexe
+     */
     public void affichResult(Integer poids, Integer taille, Integer age, Integer sexe){
-        controle.creerProfil(poids, taille, age, sexe);
+        controle.creerProfil(poids, taille, age, sexe, this);
         String message;
         message = controle.getMessage();
         float img;
@@ -95,5 +108,19 @@ public class MainActivity extends AppCompatActivity {
         }
         lblIMG.setText(String.format("%.01f", img) + " : IMG "+ message);
 
+    }
+
+    private void recupProfil(){
+        if (controle.getTaille() != null){
+            txtPoids.setText(controle.getPoids().toString());
+            txtTaille.setText(controle.getTaille().toString());
+            txtAge.setText(controle.getAge().toString());
+            if (controle.getSexe() == 0){
+                rdFemme.setChecked(true);
+            }else{
+                rdHomme.setChecked(true);
+            }
+            btnCalc.performClick();
+        }
     }
 }
