@@ -3,17 +3,23 @@ package com.example.coach.controleur;
 
 import android.content.Context;
 
+import com.example.coach.modele.AccesLocal;
 import com.example.coach.modele.Profil;
 import com.example.coach.outils.Serializer;
+
+import java.util.Date;
 
 public final class Controle {
 
     private static Controle instance = null;
     private static Profil profil;
     private static String nomFic = "saveprofil";
+    private AccesLocal accesLocal;
 
     private Controle(Context context) {
-        recupSerialize(context);
+        //recupSerialize(context);
+        accesLocal = AccesLocal.getInstance(context);
+        profil = accesLocal.recupDernier();
     }
 
     /**
@@ -36,8 +42,9 @@ public final class Controle {
      * @param context
      */
     public void creerProfil(Integer poids, Integer taille, Integer age, Integer sexe, Context context){
-        profil = new Profil (poids, taille, age, sexe);
-        Serializer.serialize(nomFic, profil, context);
+        profil = new Profil (new Date(), poids, taille, age, sexe );
+        //Serializer.serialize(nomFic, profil, context);
+        accesLocal.ajout(profil);
     }
 
     /**
@@ -68,6 +75,10 @@ public final class Controle {
         profil = (Profil)(Serializer.deSerialize(nomFic, context));
     }
 
+    /**
+     * getter sur le poids du profil
+     * @return le poids du profil
+     */
     public Integer getPoids(){
         if (profil == null){
             return null;
@@ -76,6 +87,10 @@ public final class Controle {
         }
     }
 
+    /**
+     * getter sur la taille du profil
+     * @return la taille du profil
+     */
     public Integer getTaille(){
         if (profil == null){
             return null;
@@ -84,6 +99,10 @@ public final class Controle {
         }
     }
 
+    /**
+     * getter sur l'age du profil
+     * @return l'age du profil
+     */
     public Integer getAge(){
         if (profil == null){
             return null;
@@ -92,6 +111,10 @@ public final class Controle {
         }
     }
 
+    /**
+     * getter sur le sexe du profil
+     * @return le sexe du profil
+     */
     public Integer getSexe(){
         if (profil == null){
             return null;

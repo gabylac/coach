@@ -110,6 +110,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * récupère les infos du profil pour valoriser les objets graphiques
+     */
     private void recupProfil(){
         if (controle.getTaille() != null){
             txtPoids.setText(controle.getPoids().toString());
